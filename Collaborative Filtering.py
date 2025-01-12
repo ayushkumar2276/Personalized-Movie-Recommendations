@@ -195,12 +195,11 @@ class DotModel(nn.Module):
 
         self.embedding_dim = embedding_dim
 
-        # TODO: generate user and item embeddigns using ScaledEmbedding
-        # your code
+        # Generating user and item embeddigns using ScaledEmbedding
         self.user_embeddings = ScaledEmbedding(num_users, embedding_dim)
         self.item_embeddings = ScaledEmbedding(num_items, embedding_dim)
 
-        # TODO: generate bias embeddigns using ZeroEmbedding
+        # Generating bias embeddigns using ZeroEmbedding
         # your code
         self.user_biases = ZeroEmbedding(num_users, 1)
         self.item_biases = ZeroEmbedding(num_items, 1)
@@ -208,8 +207,7 @@ class DotModel(nn.Module):
 
     def forward(self, user_ids, item_ids):
 
-        # TODO: compute and return the predicted rating based on the embedding vectors and biases.
-        # your code
+        # Computing and return the predicted rating based on the embedding vectors and biases.
         user_vector = self.user_embeddings(user_ids)
         item_vector = self.item_embeddings(item_ids)
 
@@ -278,7 +276,7 @@ class FactorizationModel(object):
             ###################
             # train the model #
             ###################
-            #Trainining loop:
+            #Training loop:
             self._net.train()
             for batch_user, batch_item, batch_rating in dataloader:
                 batch_user, batch_item, batch_rating = (
@@ -309,8 +307,7 @@ class FactorizationModel(object):
             if np.isnan(train_loss) or train_loss == 0.0:
                 raise ValueError('Degenerate train loss: {}'.format(train_loss))
 
-            #TODO: Saving model if validation loss has decreased
-            # your code
+            # Saving model if validation loss has decreased
             if valid_loss < valid_loss_min:
                 valid_loss_min = valid_loss
                 torch.save(self._net.state_dict(), 'case2best_model.pt')
@@ -349,7 +346,7 @@ class FactorizationModel(object):
         if verbose:
             print(f"RMSE: {np.sqrt(test_loss)}, MAE: {test_mae}")
         return test_loss, test_mae
-#Constructing model using FactorizationModel
+# Constructing model using FactorizationModel
 model = FactorizationModel(
     embedding_dim=32,
     n_iter=20,
@@ -503,7 +500,7 @@ pred_ratings["user_item_viewtime"] = pred_ratings["1/user_rank"] / pred_ratings[
 pred_ratings["user_item_viewtime"].sum()
 # compute each movie's value
 budget =  1000000000
-#TODO: compute and store the values of movies based on pred_ratings
+# Computing and store the values of movies based on pred_ratings
 movie_values = pred_ratings.groupby("item_num")["user_item_viewtime"].sum() * budget
 movie_values.name = "item_value"
 # replace item_num by item_name
@@ -512,7 +509,7 @@ movie_values["item_name"] = [numitem_2_name[item_num] for item_num in movie_valu
 movie_values = movie_values.set_index("item_name").squeeze(axis=1)
 # sanity check: sum of movie values == budget
 movie_values.sum() == budget
-# your code
+
 # estimated value of Toy Story (1995
 toy_story_value = movie_values.get("Toy Story (1995)", "Not Found")
 print(f"Estimated Value of Toy Story (1995): ${toy_story_value:,.2f}" if toy_story_value != "Not Found" else "Toy Story (1995) not found")
@@ -522,7 +519,7 @@ top_10_valued_movies = movie_values.sort_values(ascending=False).head(10)
 print("Top 10 mostly valued movies:")
 for movie, value in top_10_valued_movies.items():
     print(f"Movie: {movie}, Estimated Value: ${value:,.2f}")
-# your code
+
 #top 30 rated
 top_30_rated_movies = all_ratings["item_name"].value_counts().head(30)
 print("Top 30 mostly rated movies:")
