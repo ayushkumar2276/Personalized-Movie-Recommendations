@@ -200,7 +200,6 @@ class DotModel(nn.Module):
         self.item_embeddings = ScaledEmbedding(num_items, embedding_dim)
 
         # Generating bias embeddigns using ZeroEmbedding
-        # your code
         self.user_biases = ZeroEmbedding(num_users, 1)
         self.item_biases = ZeroEmbedding(num_items, 1)
 
@@ -394,7 +393,7 @@ test_loss, test_mae = model.test(test_dataloader, verbose=True)
 test_rmse = np.sqrt(test_loss)
 
 torch.save(model._net.state_dict(), "model_cf.pt")
-# Retreiving the bias of the movies from your optimized model and store it in the numpy array item_bais_np
+# Retreiving the bias of the movies from optimized model and store it in the numpy array item_bais_np
 item_bias_np = model._net.item_biases.weight.data.cpu().numpy()
 item_bias_np = item_bias_np.squeeze()
 # Constructing a dictionary that maps item_num to item_name, and vice versa
@@ -409,7 +408,7 @@ top_10_movies_bias = list_name_bias[:10]
 top_10_movies_bias
 from sklearn.decomposition import PCA
 from operator import itemgetter
-# Retriving your movie embedding vectors and store them as a numpy matrix
+# Retriving movie embedding vectors and store them as a numpy matrix
 item_emb_np = model._net.item_embeddings.weight.data.cpu().numpy()
 #Here we perform PCA to extract the 4 principal components
 pca = PCA(n_components=4)
